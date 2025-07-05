@@ -1,18 +1,32 @@
-<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.natthphong.tarplugin</id>
-    <name>tar-plugin</name>
-    <vendor>natthphong</vendor>
+    <id>com.yourcompany.quickback</id>
+    <name>Quick Back</name>
+    <version>1.0</version>
+    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+
+    <description><![CDATA[
+    Provides a simple way to navigate back to the call site after jumping to a definition.<br>
+    <em>A small UI element appears at the definition site to take you back.</em>
+    ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
-
-    <resource-bundle>messages.MyBundle</resource-bundle>
+    <depends>com.intellij.modules.java</depends> <!-- Essential for Java/Kotlin PSI manipulation -->
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.natthphong.tarplugin.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <projectService serviceImplementation="com.yourcompany.quickback.NavigationHistoryServiceImpl"
+                        serviceInterface="com.yourcompany.quickback.NavigationHistoryService"/>
+        <projectService serviceImplementation="com.yourcompany.quickback.BackStateCleaner"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.yourcompany.quickback.QuickBackLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="kotlin" implementationClass="com.yourcompany.quickback.QuickBackLineMarkerProvider"/>
+        <!-- Other extensions will be added here -->
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.natthphong.tarplugin.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
+        <listener class="com.yourcompany.quickback.GoToDefinitionListener"
+                  topic="com.intellij.openapi.actionSystem.ex.AnActionListener"/>
     </applicationListeners>
+
+    <actions>
+        <!-- Actions will be defined here if needed -->
+    </actions>
 </idea-plugin>
